@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Logcast.Recruitment.DataAccess\Logcast.Recruitment.DataAccess.csproj" />
+    <ProjectReference Include="..\Logcast.Recruitment.Shared\Logcast.Recruitment.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
