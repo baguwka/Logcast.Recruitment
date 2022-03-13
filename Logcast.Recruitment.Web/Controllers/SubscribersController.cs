@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Logcast.Recruitment.DataAccess.Exceptions;
 using Logcast.Recruitment.Domain.Services;
+using Logcast.Recruitment.Domain.Services.Subscription;
 using Logcast.Recruitment.Web.Models.Subscriber;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

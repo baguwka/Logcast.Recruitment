@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Logcast.Recruitment.DataAccess.Repositories;
 using Logcast.Recruitment.Shared.Models;
 
-namespace Logcast.Recruitment.Domain.Services
+namespace Logcast.Recruitment.Domain.Services.Subscription
 {
     public interface ISubscriptionService
     {

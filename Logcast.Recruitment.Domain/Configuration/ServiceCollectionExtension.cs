@@ -1,4 +1,7 @@
 ﻿using Logcast.Recruitment.Domain.Services;
+using Logcast.Recruitment.Domain.Services.Audio;
+using Logcast.Recruitment.Domain.Services.FileStorage;
+using Logcast.Recruitment.Domain.Services.Subscription;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Logcast.Recruitment.Domain.Configuration
@@ -13,6 +16,8 @@ namespace Logcast.Recruitment.Domain.Configuration
         private static void AddServices(this IServiceCollection services)
         {
             services.AddTransient<ISubscriptionService, SubscriptionService>();
+            services.AddTransient<IAudioService, AudioService>();
+            services.AddSingleton<IFileStorageService, InMemoryFileStorageService>();
         }
     }
 }

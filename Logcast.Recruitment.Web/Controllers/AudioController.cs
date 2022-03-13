@@ -1,7 +1,10 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
+using Logcast.Recruitment.Domain.Services.Audio;
+using Logcast.Recruitment.Shared.Models;
 using Logcast.Recruitment.Web.Models.Audio;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,43 +16,53 @@ namespace Logcast.Recruitment.Web.Controllers
     [Route("api/audio")]
     public class AudioController : ControllerBase
     {
-        public AudioController()
-        {
-        }
+	    private readonly IAudioService _audioService;
 
-        [HttpPost("audio-file")]
+	    public AudioController(
+		    IAudioService audioService
+	        )
+	    {
+		    _audioService = audioService;
+	    }
+
+        [HttpPost("audio-files")]
         [SwaggerResponse(StatusCodes.Status200OK, "Audio file uploaded successfully", typeof(UploadAudioFileResponse))]
         [ProducesResponseType(typeof(UploadAudioFileResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> UploadAudioFile(IFormFile audioFile)
+        public async Task<FilePrimitive> UploadAudioFile(IFormFile audioFile)
         {
-	        //TODO: Store Audio File
-	        return Ok();
+	        await using var str = new MemoryStream();
+	        await audioFile.CopyToAsync(str);
+	        var bytes = str.ToArray();
+	        return await _audioService.StoreFile(bytes, audioFile.FileName);
         }
 
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status200OK, "Audio metadata registered successfully")]
-        public async Task<IActionResult> AddAudioMetadata([Required] [FromBody] AddAudioRequest request)
+        public async Task<AddMetadataResponse> AddAudioMetadata([Required] [FromBody] AddAudioRequest request)
         {
-            //TODO: Store Audio Metadata
-            return Ok();
+	        var id = await _audioService.AddMetadata(request.ToDomainModel());
+	        return new AddMetadataResponse
+	        {
+		        Id = id
+	        };
         }
 
         [HttpGet("{audioId:Guid}")]
         [SwaggerResponse(StatusCodes.Status200OK, "Audio metadata fetched successfully", typeof(AudioMetadataResponse))]
         [ProducesResponseType(typeof(AudioMetadataResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAudioMetadata([FromRoute] Guid audioId)
+        public async Task<AudioMetadataResponse> GetAudioMetadata([FromRoute] Guid audioId)
         {
-	        //TODO: Get Audio Metadata
-	        return Ok();
+	        var metadata = await _audioService.GetMetadataById(audioId);
+	        return new AudioMetadataResponse(metadata);
         }
 
-        [HttpGet("stream/{audioId:Guid}")]
+        [HttpGet("{audioId:Guid}/stream")]
         [SwaggerResponse(StatusCodes.Status200OK, "Preview stream started successfully", typeof(FileContentResult))]
         [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAudioStream([FromRoute] Guid audioId)
         {
-	        //TODO: Get stored audio file and return stream
-            return File(new MemoryStream(), "audio/mpeg");
+	        var stream = await _audioService.GetAudioStream(audioId);
+            return new FileStreamResult(stream, "audio/mpeg");
         }
 	}
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Logcast.Recruitment.DataAccess.Exceptions;
 using Logcast.Recruitment.DataAccess.Repositories;
 using Logcast.Recruitment.Domain.Services;
+using Logcast.Recruitment.Domain.Services.Subscription;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
