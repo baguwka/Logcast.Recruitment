@@ -1,3 +1,77 @@
+# Solution instructions
+
+### Store file
+```
+curl --location --request POST 'http://localhost:5006/api/audio/audio-files' \
+--form 'audioFile=@"/C:/Users/test/example.mp3"'
+```
+
+response:
+
+```
+{
+    "fileId": "68307dfa-7227-48a3-a825-88e506279deb",
+    "name": "example.mp3"
+}
+```
+
+
+### Save metadata for file using given file-id
+
+```
+curl --location --request POST 'http://localhost:5006/api/audio/' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "FileId" : "68307dfa-7227-48a3-a825-88e506279deb",
+    "Name" : "example.mp3",
+    "Length" : 1243532,
+    "BitDepth" : 123,
+    "Bitrate" : 44000,
+    "Channels" : 2,
+    "DurationSeconds" : 120,
+    "Artist" : "Unknown",
+    "Genre" : "Verious"
+}'
+```
+
+response:
+```
+{
+    "id": "05773a0c-0f52-4385-31f5-08da04f8b068"
+}
+```
+
+this is an id to fetch metadata
+
+### Fetch metadata using given id
+
+```
+curl --location --request GET 'http://localhost:5006/api/audio/05773a0c-0f52-4385-31f5-08da04f8b068'
+```
+
+
+response:
+```
+{
+    "id": "05773a0c-0f52-4385-31f5-08da04f8b068",
+    "fileId": "68307dfa-7227-48a3-a825-88e506279deb",
+    "name": "example.mp3",
+    "length": 1243532,
+    "bitDepth": 123,
+    "bitrate": 44000,
+    "channels": 2,
+    "durationSeconds": 120,
+    "artist": "Unknown",
+    "genre": "Verious"
+}
+```
+
+### Get audio stream using given id
+
+```
+curl --location --request GET 'http://localhost:5006/api/audio/05773a0c-0f52-4385-31f5-08da04f8b068/stream'
+```
+
 # Logcast recruitment assignment 
 Hi! The purpose of this assignment is to get familiar with the logcast stack and to solve a realistic use case.
 
